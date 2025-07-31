@@ -27,20 +27,32 @@ class Element(ABC):
     def __str__(self):
         return f"{self.__class__.__name__}(nom={self.nom}, valeur={self.valeur}, unite={self.unite.name})"
 
+    def __repr__(self):
+        return self.nom
+
 
 class Ingredient(Element):
     def __str__(self):
         return f"Ingrédient : " + super().__str__()
+
+    # def __repr__(self):
+    #     return self.nom
 
 
 class Additif(Element):
     def __str__(self):
         return f"Allergène : " + super().__str__()
 
+    # def __repr__(self):
+    #     return self.nom
+
 
 class Allergene(Element):
     def __str__(self):
         return f"Additif : " + super().__str__()
+
+    # def __repr__(self):
+    #     return self.nom
 
 
 class TypeElement(Enum):
