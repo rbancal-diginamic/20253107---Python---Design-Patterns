@@ -1,13 +1,25 @@
+from abc import ABC
 from enum import Enum
 
 
 class Unite(Enum):
-    MICRO_GRAMMES = 1
-    MILLI_GRAMMES = 2
+    MICROGRAMME = "micro-grammes"
+    MILLIGRAMME = "milligrammes"
+    GRAMME = "grammes"
 
 
-class Element:
+class ElementValidator:
+    @staticmethod
+    def validate(attribut, valeur, types):
+        if not isinstance(valeur, types):
+            raise TypeError(f"Le champ '{attribut}' doit être de type : {types}.")
+
+
+class Element(ABC):
     def __init__(self, nom: str, valeur: float, unite: Unite):
+        ElementValidator.validate("nom", nom, str)
+        ElementValidator.validate("valeur", valeur, (int, float))
+        ElementValidator.validate("unite", unite, Unite)
         self.nom = nom
         self.valeur = valeur
         self.unite = unite
@@ -16,18 +28,19 @@ class Element:
         return f"{self.__class__.__name__}(nom={self.nom}, valeur={self.valeur}, unite={self.unite.name})"
 
 
-
 class Ingredient(Element):
-    pass
+    def __str__(self):
+        return f"Ingrédient : " + super().__str__()
 
 
 class Additif(Element):
-    pass
+    def __str__(self):
+        return f"Allergène : " + super().__str__()
 
 
 class Allergene(Element):
-    pass
-
+    def __str__(self):
+        return f"Additif : " + super().__str__()
 
 
 class TypeElement(Enum):
@@ -52,10 +65,10 @@ class ElementFactory:
 
 # Exemple de test de la factory
 if __name__ == "__main__":
-    recette_1 = ElementFactory.creation_element(TypeElement.ALLERGENE, "Curry", 10, Unite.MILLI_GRAMMES)
-    recette_2 = ElementFactory.creation_element(TypeElement.INGREDIENT, "Piment", 20, Unite.MILLI_GRAMMES)
-    recette_3 = ElementFactory.creation_element(TypeElement.ADDITIF, "E101", 50, Unite.MICRO_GRAMMES)
-    recette_4 = ElementFactory.creation_element(TypeElement.AUTRES, "sucre", 47, Unite.MICRO_GRAMMES)
+    recette_1 = ElementFactory.creation_element(TypeElement.ALLERGENE, "Curry", 10, Unite.MILLIGRAMME)
+    recette_2 = ElementFactory.creation_element(TypeElement.INGREDIENT, "Piment", 20, Unite.MILLIGRAMME)
+    recette_3 = ElementFactory.creation_element(TypeElement.ADDITIF, "E101", 50, Unite.MICROGRAMME)
+    recette_4 = ElementFactory.creation_element(TypeElement.AUTRES, "sucre", 47, Unite.MICROGRAMME)
 
     print(recette_1)
     print(recette_2)
